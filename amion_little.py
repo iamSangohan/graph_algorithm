@@ -8,6 +8,8 @@ matrix = [['.',780,320,580,480,660],
           [660,200,630,310,500,'.']
         ]
 
+liste_solution = []  
+
 def sumMin(matrix:list):
     mat = copy.deepcopy(matrix)
     sumM = 0
@@ -73,7 +75,7 @@ def regret(matrix, liste_solution:list[list], val):
                 regretList.append([i,j,minLine+minCol])
     max = 0
     regretMax = []
-    print('La liste des regrets de cette etape est :', regretList)
+    # print('La liste des regrets de cette etape est :', regretList)
     for element in regretList:
         if element[2] > max:
             regretMax = element
@@ -86,7 +88,7 @@ def regret(matrix, liste_solution:list[list], val):
     # print(mat)
     
     #Suppression de la ligne et la colonne du regret
-    print('le regret max :', regretMax)
+    # print('le regret max :', regretMax)
     col = regretMax[1]
     line = regretMax[0]
     matReduit = copy.deepcopy(matrix)
@@ -103,7 +105,7 @@ def regret(matrix, liste_solution:list[list], val):
     else:
         poids = liste_solution[-1][2]+val
         liste_solution.append([regretMax[0],regretMax[1],poids])
-    print('liste :', liste_solution)
+    # print('liste :', liste_solution)
     if liste_solution:
         initial = liste_solution[0]
         dernier = liste_solution[-1]
@@ -112,8 +114,9 @@ def regret(matrix, liste_solution:list[list], val):
         matReduit[x][y] = '.'
     return regretMax,matReduit
 
-liste_solution = []  
-
+#
+#
+#Credit au compte github "fleury12"
 def ranger(solution:list[list], indice):
     a=solution[indice]
     j=indice+1
@@ -125,16 +128,19 @@ def ranger(solution:list[list], indice):
 
 def little(matrix : list[list]):
     
-    print('------------------')
-    print('matrix :', matrix)
+    # print('------------------')
+    # print('matrix :', matrix)
     sumM,newMat = sumMin(matrix)
-    print('Somme min :', sumM)
+    # print('Somme min :', sumM)
     regretMax,Mat= regret(newMat, liste_solution, sumM)
-    print('regret max :', regretMax)
-    print('somme min:', sumM) 
+    # print('regret max :', regretMax)
+    # print('somme min:', sumM) 
     if regretMax[2] != 0:
         little(Mat)
-  
+        
+#
+#
+#Credit au compte github "fleury12"
 def ordonner(liste_solution):      
     i=0
     while i< len(liste_solution)-1:
@@ -142,8 +148,9 @@ def ordonner(liste_solution):
         b= liste_solution.pop(a)
         liste_solution.insert(i+1, b)
         i=i+1
-    
+    return liste_solution
     
 little(matrix)
+print("La matrice de depart est :" ,matrix)
 print("Liste des solutions dans le desordre :",liste_solution)
-ordonner(liste_solution)
+print("La solution finale est :", ordonner(liste_solution))
