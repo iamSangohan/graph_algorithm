@@ -99,19 +99,30 @@ def regret(matrix, liste_solution:list[list], val):
         for j in range(len(matReduit[i])):
             if j == col:
                 matReduit[i][j] = "."
+                
     poids = 0
-    if len(liste_solution) == 0:
-        liste_solution.append([regretMax[0],regretMax[1],val+regretMax[2]])
-    else:
+    if len(liste_solution) != 0:
         poids = liste_solution[-1][2]
-        liste_solution.append([regretMax[0],regretMax[1],poids])
-    # print('liste :', liste_solution)
+        
+    liste_solution.append([regretMax[0],regretMax[1],0])
+
+        
     if liste_solution:
         initial = liste_solution[0]
         dernier = liste_solution[-1]
         x=dernier[1]
         y=initial[0]
         matReduit[x][y] = '.'
+    
+    # print('liste :', liste_solution)
+    
+    poids += sumMin(matReduit)[0]
+
+    if len(liste_solution) == 1:
+        poids += val
+        
+    liste_solution[-1][2] = poids
+    
     return regretMax,matReduit
 
 #
