@@ -79,25 +79,16 @@ def regret(matrix):
             max_value = regretMax[2]
     print(regretMax)      
     #Suppression de la ligne et la colonne du regret
-    # col = regretMax[1]
-    # line = regretMax[0]
-    # matReduit = copy.deepcopy(matrix)
-    # for i in range(len(matReduit)):
-    #     if i == line:
-    #         for j in range(len(matReduit[i])):
-    #             matReduit[i][j] = "."
-    #     for j in range(len(matReduit[i])):
-    #         if j == col:
-    #             matReduit[i][j] = "."
-    for j in range(len(mat)):
-        if j == regretMax[0]:
-            del mat[j]
-            break
-    for j in range(len(mat)):
-        for i in range(len(mat[j])):
-            if i == regretMax[1]:
-                del mat[j][i]
-                break
+    col = regretMax[1]
+    line = regretMax[0]
+    matReduit = copy.deepcopy(matrix)
+    for i in range(len(matReduit)):
+        if i == line:
+            for j in range(len(matReduit[i])):
+                matReduit[i][j] = "."
+        for j in range(len(matReduit[i])):
+            if j == col:
+                matReduit[i][j] = "."
     
     return regretMax, mat
 
