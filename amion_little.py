@@ -1,6 +1,5 @@
 import copy
 count = 0
-val1 = 0
 matrix = [['.',780,320,580,480,660],
           [780,'.',700,460,300,200],
           [320,700,'.',380,820,630],
@@ -8,6 +7,8 @@ matrix = [['.',780,320,580,480,660],
           [480,300,820,750,'.',500],
           [660,200,630,310,500,'.']
         ]
+
+liste_solution = []  
 
 def sumMin(matrix:list):
     global count
@@ -50,7 +51,6 @@ def sumMin(matrix:list):
                 if not isinstance(mat[j][i], int): pass
                 else:
                     mat[j][i] -= minimum
-    
     return sumM,mat
 
 def regret(matrix, liste_solution:list[list], val):
@@ -77,7 +77,7 @@ def regret(matrix, liste_solution:list[list], val):
                 regretList.append([i,j,minLine+minCol])
     max = 0
     regretMax = []
-    print('La liste des regrets de cette etape est :', regretList)
+    # print('La liste des regrets de cette etape est :', regretList)
     for element in regretList:
         if element[2] > max:
             regretMax = element
@@ -90,7 +90,7 @@ def regret(matrix, liste_solution:list[list], val):
     # print(mat)
     
     #Suppression de la ligne et la colonne du regret
-    print('le regret max :', regretMax)
+    # print('le regret max :', regretMax)
     col = regretMax[1]
     line = regretMax[0]
     matReduit = copy.deepcopy(matrix)
@@ -101,6 +101,7 @@ def regret(matrix, liste_solution:list[list], val):
         for j in range(len(matReduit[i])):
             if j == col:
                 matReduit[i][j] = "."
+    
     if count == 1:
         liste_solution.append([regretMax[0],regretMax[1],val+regretMax[2]+sumMin(matrix)[0]])
     else:
@@ -109,37 +110,56 @@ def regret(matrix, liste_solution:list[list], val):
     if liste_solution:
         initial = liste_solution[0]
         dernier = liste_solution[-1]
-        print('initial', initial)
-        print('dernier', dernier)
         x=dernier[1]
         y=initial[0]
         matReduit[x][y] = '.'
-    print(f"\n après suppression on a: {matReduit}")
-    
-            
     return regretMax,matReduit
 
-liste_solution = []  
+#
+#
+#Credit au compte github "fleury12"
+def ranger(solution:list[list], indice):
+    a=solution[indice]
+    j=indice+1
+    while j< len(solution):
+        if a[1]== solution[j][0]:
+            break
+        j=j+1
+    return j
 
-def little(matrix : list[list], val = 0):
+def little(matrix : list[list]):
     
-    print('------------------')
-    print('matrix :', matrix)
+    # print('------------------')
+    # print('matrix :', matrix)
     sumM,newMat = sumMin(matrix)
+    # print('Somme min :', sumM)
     regretMax,Mat= regret(newMat, liste_solution, sumM)
-    print('regret max :', regretMax)
-    print('somme min:', sumM)
-    val += sumM 
-    print(f'val {val}')
-    # if len(liste_solution)!=0:
-    #     print('OK', liste_solution)
-    #     taille = len(liste_solution)
-    #     liste_solution[taille-1][2] = val
+    # print('regret max :', regretMax)
+    # print('somme min:', sumM) 
     if regretMax[2] != 0:
-        little(Mat, val)
+        little(Mat)
         
-    print("Liste des solutions :",liste_solution)
+#
+#
+#Credit au compte github "fleury12"
+def ordonner(liste_solution):      
+    i=0
+    while i< len(liste_solution)-1:
+        a= ranger(liste_solution,i)
+        b= liste_solution.pop(a)
+        liste_solution.insert(i+1, b)
+        i=i+1
+    return liste_solution
+
+def chemin(liste_solution):
+    tab_chemin = []
+    for soltuion in liste_solution:
+        tab_chemin.append(' '+str(soltuion[0])+'_'+str(soltuion[1])+' ')
+    
+    return ''.join(tab_chemin)
 
 little(matrix)
-
-# Yo
+print("La matrice de depart est :" ,matrix)
+print("Liste des solutions dans le desordre :",liste_solution)
+print(f'Liste des solutions dans le ordre{ordonner(liste_solution)}')
+print(f'Chemin {chemin(ordonner(liste_solution))}')
