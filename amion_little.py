@@ -97,20 +97,19 @@ def regret(matrix, liste_solution:list[list], val):
         for j in range(len(matReduit[i])):
             if j == col:
                 matReduit[i][j] = "."
-    
-    liste_solution.append([regretMax[0],regretMax[1],val+sumMin(matrix)[0]])
+    poids = 0
+    if len(liste_solution) == 0:
+        liste_solution.append([regretMax[0],regretMax[1],val])
+    else:
+        poids = liste_solution[-1][2]+val
+        liste_solution.append([regretMax[0],regretMax[1],poids])
     print('liste :', liste_solution)
     if liste_solution:
         initial = liste_solution[0]
         dernier = liste_solution[-1]
-        print('initial', initial)
-        print('dernier', dernier)
         x=dernier[1]
         y=initial[0]
         matReduit[x][y] = '.'
-    print(f"\n après suppression on a: {matReduit}")
-    
-            
     return regretMax,matReduit
 
 liste_solution = []  
@@ -120,6 +119,7 @@ def little(matrix : list[list], val = 0):
     print('------------------')
     print('matrix :', matrix)
     sumM,newMat = sumMin(matrix)
+    print('Somme min :', sumM)
     regretMax,Mat= regret(newMat, liste_solution, sumM)
     print('regret max :', regretMax)
     print('somme min:', sumM)
@@ -131,8 +131,6 @@ def little(matrix : list[list], val = 0):
     if regretMax[2] != 0:
         little(Mat, val)
         
-    print("Liste des solutions :",liste_solution)
 
 little(matrix)
-
-# Yo
+print("Liste des solutions :",liste_solution)
