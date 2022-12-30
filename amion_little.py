@@ -1,5 +1,6 @@
 import copy
-
+count = 0
+val1 = 0
 matrix = [['.',780,320,580,480,660],
           [780,'.',700,460,300,200],
           [320,700,'.',380,820,630],
@@ -9,6 +10,8 @@ matrix = [['.',780,320,580,480,660],
         ]
 
 def sumMin(matrix:list):
+    global count
+    count+=1
     mat = copy.deepcopy(matrix)
     sumM = 0
     for i in range(len(mat)):
@@ -47,6 +50,7 @@ def sumMin(matrix:list):
                 if not isinstance(mat[j][i], int): pass
                 else:
                     mat[j][i] -= minimum
+    
     return sumM,mat
 
 def regret(matrix, liste_solution:list[list], val):
@@ -97,8 +101,10 @@ def regret(matrix, liste_solution:list[list], val):
         for j in range(len(matReduit[i])):
             if j == col:
                 matReduit[i][j] = "."
-    
-    liste_solution.append([regretMax[0],regretMax[1],val+sumMin(matrix)[0]])
+    if count == 1:
+        liste_solution.append([regretMax[0],regretMax[1],val+regretMax[2]+sumMin(matrix)[0]])
+    else:
+        liste_solution.append([regretMax[0],regretMax[1],liste_solution[-1][2]+sumMin(matrix)[0]])
     print('liste :', liste_solution)
     if liste_solution:
         initial = liste_solution[0]
@@ -124,6 +130,7 @@ def little(matrix : list[list], val = 0):
     print('regret max :', regretMax)
     print('somme min:', sumM)
     val += sumM 
+    print(f'val {val}')
     # if len(liste_solution)!=0:
     #     print('OK', liste_solution)
     #     taille = len(liste_solution)
