@@ -132,6 +132,7 @@ def little(matrix : list[list]):
     # print('matrix :', matrix)
     sumM,newMat = sumMin(matrix)
     # print('Somme min :', sumM)
+    liste_solution.append([regretMax[0],regretMax[1],sumM])
     regretMax,Mat= regret(newMat, liste_solution, sumM)
     # print('regret max :', regretMax)
     # print('somme min:', sumM) 
