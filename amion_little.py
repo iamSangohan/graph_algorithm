@@ -58,29 +58,75 @@ def regret(matrix):
     regretList = []
     for i in range(len(mat)):
         for j in range(len(mat[i])):
-            if mat[i][j] != 0 : pass
-            else:
+            if mat[i][j] == 0 :
+                #On met tous les elements de la ligne dans un tableau puis on prend le min
                 line = mat[i].copy()
-                line.remove('.'),line.remove(mat[i][j])
+                line.remove(mat[i][j])
+                line = [x for x in line if x != '.']
                 minLine = min(line)
-                col = [mat[a][j] for a in range(len(matrix))]
-                col.remove('.'), col.remove(mat[i][j])  
+                #On met tous les elements de la colonne dans un tableau puis on prend le min
+                col = [mat[a][j] for a in range(len(matrix))] 
+                col.remove(mat[i][j])
+                col = [x for x in col if x != '.']
                 minCol = min(col)
                 regretList.append([i,j,minLine+minCol])
-    max = 0
+    max_value = 0
+    regretMax = []
+    #print(regretList)
     for element in regretList:
-        if element[2] > max:
+        if element[2] > max_value:
             regretMax = element
-            max = regretMax[2]
+            max_value = regretMax[2]
+    print(regretMax)      
+    #Suppression de la ligne et la colonne du regret
+    # col = regretMax[1]
+    # line = regretMax[0]
+    # matReduit = copy.deepcopy(matrix)
+    # for i in range(len(matReduit)):
+    #     if i == line:
+    #         for j in range(len(matReduit[i])):
+    #             matReduit[i][j] = "."
+    #     for j in range(len(matReduit[i])):
+    #         if j == col:
+    #             matReduit[i][j] = "."
+    for j in range(len(mat)):
+        if j == regretMax[0]:
+            del mat[j]
+            break
+    for j in range(len(mat)):
+        for i in range(len(mat[j])):
+            if i == regretMax[1]:
+                del mat[j][i]
+                break
     
-    return regretMax
+    return regretMax, mat
+
+mat = sumMin(matrix)[1]
+print(regret(mat)[1])
 
 def little(matrix : list):
     ## tree = [g,r,d]
     tree = []
+    t = {}
     val,newMat = sumMin(matrix)
     regretMax = regret(newMat)
-    tree.append([[val+regretMax[2]],val,tree])
+    tree["valeur"]
+
+    t[str(regretMax[0])+str(regretMax[1])+'_'] = val+regretMax[2]
+    tree[val] = [t,tree]
+    # tree.append([[val+regretMax[2]],val,tree])
     print(tree)
-    
+
 little(matrix)
+
+# def ajouter_noeud(arbre, valeur):
+#     if arbre is None:
+#         arbre = {}
+#         arbre['valeur'] = valeur #Valeur va etre un tableau avec les sommets et la valeur du trajet
+#         arbre['gauche'] = None
+#         arbre['droit'] = None
+#     elif valeur < arbre['valeur']:
+#         arbre['gauche'] = ajouter_noeud(arbre['gauche'], valeur)
+#     else:
+#         arbre['droit'] = ajouter_noeud(arbre['droit'], valeur)
+#     return arbre
