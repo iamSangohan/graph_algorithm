@@ -49,7 +49,7 @@ def sumMin(matrix:list):
                     mat[j][i] -= minimum
     return sumM,mat
 
-def regret(matrix, liste_solution, val):
+def regret(matrix, liste_solution:list[list], val):
     mat = copy.deepcopy(matrix)
     regretList = []
     for i in range(len(mat)):
@@ -111,14 +111,16 @@ def regret(matrix, liste_solution, val):
     print(f"\n après suppression on a: {matReduit}")
     
             
-    return regretMax,matReduit, liste_solution
+    return regretMax,matReduit
+
+liste_solution = []  
+
+def little(matrix : list[list], val = 0):
     
-def little(matrix : list, val = 0):
-    liste_solution = []
     print('------------------')
     print('matrix :', matrix)
     sumM,newMat = sumMin(matrix)
-    regretMax,Mat, liste_solution = regret(newMat, liste_solution, sumM)
+    regretMax,Mat= regret(newMat, liste_solution, sumM)
     print('regret max :', regretMax)
     print('somme min:', sumM)
     val += sumM 
