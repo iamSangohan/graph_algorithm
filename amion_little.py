@@ -10,9 +10,6 @@ matrix = [['.',780,320,580,480,660],
 
 def sumMin(matrix:list):
     mat = copy.deepcopy(matrix)
-    # print('------------------------------')
-    # for line in mat:
-        # print(line)
     sumM = 0
     for i in range(len(mat)):
         line = mat[i]
@@ -20,22 +17,17 @@ def sumMin(matrix:list):
         for j in range(len(mat[i])):
             element = mat[i][j]
             if not isinstance(element,int) :
-                print('element :', element)
                 pass
             else:
-                print("OK")
                 if element < minimum:
                     minimum = element
-                print('minimum', minimum)
         if minimum == 99999999:
             continue
         sumM += minimum
         for j in range(len(line)):
             if not isinstance(mat[i][j], int): pass
             else: mat[i][j] -= minimum
-        # print(line)
-    # print(mat)
-    # print("................................................")
+            
     for i in range(len(mat)):
         minimum = 999999999
         for j in range(len(mat)):
@@ -54,13 +46,10 @@ def sumMin(matrix:list):
             for j in range(len(mat)):
                 if not isinstance(mat[j][i], int): pass
                 else:
-                    # print('min :', minimum)
                     mat[j][i] -= minimum
-                    # print(mat[j][i])
-    print('sumM:', sumM)
     return sumM,mat
 
-def regret(matrix):
+def regret(matrix, liste_solution, val):
     mat = copy.deepcopy(matrix)
     regretList = []
     for i in range(len(mat)):
@@ -80,29 +69,24 @@ def regret(matrix):
                 if len(col)==0:
                     minCol = 0
                 else:
-                    # print(f'mat\n  {mat} \n \n col {col} \n \n ')
                     minCol = min(col)
                 regretList.append([i,j,minLine+minCol])
     max = 0
+    regretMax = []
+    print('La liste des regrets de cette etape est :', regretList)
     for element in regretList:
-        if element[2] >= max:
+        if element[2] > max:
             regretMax = element
             max = regretMax[2]
-    if len(mat[0])>2:
-        mat[regretMax[1]][regretMax[0]] = '.'
-        # print(f'chemin inv\n  {mat}\n \n  regret {regretList} \n MAx')
-    
-    # print(f"\n{indice_regret[1]} \n{indice_regret[0]}")
+    if max == 0:
+        for element in regretList:
+            if element[2] == max:
+                regretMax = element
+                max = regretMax[2]
     # print(mat)
-    # liste_solution.append(element_liste_regret)
-    # initial = liste_solution[0]
-    # dernier = liste_solution[-1]
-    # x=dernier[1]
-    # y=initial[0]
-    # mat[x][y]=(0,0)
-    # print(f"\n après suppression on a: {mat}")
     
     #Suppression de la ligne et la colonne du regret
+    print('le regret max :', regretMax)
     col = regretMax[1]
     line = regretMax[0]
     matReduit = copy.deepcopy(matrix)
@@ -114,29 +98,38 @@ def regret(matrix):
             if j == col:
                 matReduit[i][j] = "."
     
+    liste_solution.append([regretMax[0],regretMax[1],val+sumMin(matrix)[0]])
+    print('liste :', liste_solution)
+    if liste_solution:
+        initial = liste_solution[0]
+        dernier = liste_solution[-1]
+        print('initial', initial)
+        print('dernier', dernier)
+        x=dernier[1]
+        y=initial[0]
+        matReduit[x][y] = '.'
+    print(f"\n après suppression on a: {matReduit}")
+    
             
-    return regretMax,matReduit
+    return regretMax,matReduit, liste_solution
     
 def little(matrix : list, val = 0):
+    liste_solution = []
+    print('------------------')
+    print('matrix :', matrix)
     sumM,newMat = sumMin(matrix)
-    regretMax,Mat = regret(newMat)
-    print('-----------------')
-    print('val :',val)
-    print('matrice :',matrix)
-    racine = sumM
+    regretMax,Mat, liste_solution = regret(newMat, liste_solution, sumM)
+    print('regret max :', regretMax)
+    print('somme min:', sumM)
+    val += sumM 
+    # if len(liste_solution)!=0:
+    #     print('OK', liste_solution)
+    #     taille = len(liste_solution)
+    #     liste_solution[taille-1][2] = val
     if regretMax[2] != 0:
-        gauche = [regretMax[0],regretMax[1],racine+regretMax[2],False]    
-        tree = [gauche,racine,[regretMax[0],regretMax[1],little(Mat,racine),True]]
-        print(tree)
-    
-    
-    
-    
-    # return newMat,tree,val
-
-# def recurLittle(matrix:list)->list:
-#     tree = []
-#     recurLittle(matrix, tree,0)
+        little(Mat, val)
         
+    print("Liste des solutions :",liste_solution)
+
 little(matrix)
 
