@@ -20,10 +20,15 @@ def sumMin(matrix:list):
         for j in range(len(mat[i])):
             element = mat[i][j]
             if not isinstance(element,int) :
+                print('element :', element)
                 pass
             else:
-                if element<minimum:
+                print("OK")
+                if element < minimum:
                     minimum = element
+                print('minimum', minimum)
+        if minimum == 99999999:
+            continue
         sumM += minimum
         for j in range(len(line)):
             if not isinstance(mat[i][j], int): pass
@@ -38,8 +43,10 @@ def sumMin(matrix:list):
             if not isinstance(elementCol, int) :
                 pass
             else:
-                if elementCol<minimum:
+                if elementCol < minimum:
                     minimum = elementCol
+        if minimum == 999999999:
+            continue
         if minimum == 0:
             pass
         else:
@@ -47,10 +54,10 @@ def sumMin(matrix:list):
             for j in range(len(mat)):
                 if not isinstance(mat[j][i], int): pass
                 else:
-                    # print(mat[j][i])
+                    # print('min :', minimum)
                     mat[j][i] -= minimum
                     # print(mat[j][i])
-    #print(sumM)
+    print('sumM:', sumM)
     return sumM,mat
 
 def regret(matrix):
@@ -85,6 +92,16 @@ def regret(matrix):
         mat[regretMax[1]][regretMax[0]] = '.'
         # print(f'chemin inv\n  {mat}\n \n  regret {regretList} \n MAx')
     
+    # print(f"\n{indice_regret[1]} \n{indice_regret[0]}")
+    # print(mat)
+    # liste_solution.append(element_liste_regret)
+    # initial = liste_solution[0]
+    # dernier = liste_solution[-1]
+    # x=dernier[1]
+    # y=initial[0]
+    # mat[x][y]=(0,0)
+    # print(f"\n après suppression on a: {mat}")
+    
     #Suppression de la ligne et la colonne du regret
     col = regretMax[1]
     line = regretMax[0]
@@ -96,6 +113,7 @@ def regret(matrix):
         for j in range(len(matReduit[i])):
             if j == col:
                 matReduit[i][j] = "."
+    
             
     return regretMax,matReduit
     
